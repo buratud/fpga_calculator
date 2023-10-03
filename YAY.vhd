@@ -1,7 +1,10 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
-package YAY is
-        type digit is array (0 to 5) of std_logic_vector(0 to 6);
-end package;
+PACKAGE YAY IS
+        SUBTYPE digit IS STD_LOGIC_VECTOR(0 TO 6);
+        TYPE digits IS ARRAY (NATURAL RANGE <>) OF digit;
+        SUBTYPE bcd IS STD_LOGIC_VECTOR(3 downto 0);
+        TYPE bcds IS ARRAY (NATURAL RANGE <>) of bcd;
+END PACKAGE;

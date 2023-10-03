@@ -9,14 +9,14 @@ ENTITY Calculator IS
 	PORT (
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-		o : OUT digit
+		o : OUT digits(5 DOWNTO 0)
 	);
 END ENTITY;
 
 ARCHITECTURE flow OF Calculator IS
 	SIGNAL state : STD_LOGIC_VECTOR(1 DOWNTO 0);
-	SIGNAL aa, bb : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-	SIGNAL d0, d1, d2, d3, d4, d5 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+	SIGNAL d, s : bcds(5 DOWNTO 0);
 BEGIN
 	main_state : ENTITY work.MainState(behaivioral)
 		PORT MAP(
@@ -29,29 +29,29 @@ BEGIN
 		PORT MAP(
 			a_i => a,
 			b_i => b,
-			a_o => aa,
-			b_o => bb,
+			a_o => a_n,
+			b_o => b_n,
 			state => state
 		);
 	convertor_a : ENTITY work.NumberConvertor(flow)
 		GENERIC MAP(N)
 		PORT MAP(
-			i => aa,
-			o_0 => d3,
-			o_1 => d4,
-			o_sign => d5);
+			i => a_n,
+			o_0 => d(3),
+			o_1 => d(4),
+			o_sign => d(5));
 	convertor_b : ENTITY work.NumberConvertor(flow)
 		GENERIC MAP(N)
 		PORT MAP(
-			i => bb,
-			o_0 => d0,
-			o_1 => d1,
-			o_sign => d2
+			i => b_n,
+			o_0 => d(0),
+			o_1 => d(1),
+			o_sign => d(2)
 		);
-	digit_0 : ENTITY work.BcdTo7SegmentNumber(letter) PORT MAP(clk, d0, o(0));
-	digit_1 : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d1, o(1));
-	digit_2 : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d2, o(2));
-	digit_3 : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d3, o(3));
-	digit_4 : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d4, o(4));
-	digit_5 : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d5, o(5));
+	multiplexer : FOR i IN 0 TO 5 GENERATE
+		multiplexer : ENTITY work.BcdMultiplexer4To1(selector) PORT MAP(state, d(i), "0000", "0000", "0000", s(i));
+	END GENERATE;
+	digit : FOR i IN 0 TO 5 GENERATE
+		digit : ENTITY work.BcdTo7SegmentNumber(letter) PORT MAP(clk, s(i), o(i));
+	END GENERATE;
 END ARCHITECTURE;
