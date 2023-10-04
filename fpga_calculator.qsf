@@ -168,16 +168,20 @@ set_location_assignment PIN_N18 -to o[5][3]
 set_location_assignment PIN_M20 -to o[5][4]
 set_location_assignment PIN_N19 -to o[5][5]
 set_location_assignment PIN_N20 -to o[5][6]
-set_global_assignment -name VHDL_FILE BinaryTo7SegmentDigits.vhd
+set_global_assignment -name VHDL_FILE SignDetecter.vhd
+set_global_assignment -name VHDL_FILE BcdTo7SegmentDigits.vhd
 set_global_assignment -name VHDL_FILE SelectOper.vhd
 set_global_assignment -name VHDL_FILE Calculator.vhd
 set_global_assignment -name VHDL_FILE MainState.vhd
 set_global_assignment -name VHDL_FILE SelectNum.vhd
 set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
-set_global_assignment -name VHDL_FILE BcdTo7SegmentNumber.vhd
 set_global_assignment -name VHDL_FILE YAY.vhd
 set_global_assignment -name VHDL_FILE Multiplexer4To1.vhd
 set_global_assignment -name VHDL_FILE BcdMultiplexer4To1.vhd
 set_global_assignment -name VHDL_FILE OperatorTo7SegmentDigits.vhd
 set_global_assignment -name VHDL_FILE SevenSegmentMultiplexer4To1.vhd
+set_global_assignment -name VHDL_FILE FullAdder.vhd
+set_global_assignment -name VHDL_FILE FullAdderGenerator.vhd
+set_global_assignment -name VHDL_FILE AdderSubtractor.vhd
+set_global_assignment -name VHDL_FILE BcdTo7Segment.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

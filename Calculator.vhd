@@ -14,12 +14,13 @@ ENTITY Calculator IS
 END ENTITY;
 
 ARCHITECTURE flow OF Calculator IS
-	SIGNAL state, oper : STD_LOGIC_VECTOR(1 DOWNTO 0);
+	SIGNAL state, oper_in, oper : STD_LOGIC_VECTOR(1 DOWNTO 0);
 	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 	SIGNAL d, e : bcds(5 DOWNTO 0);
-	SIGNAL s, t : digits(5 DOWNTO 0);
-
+	SIGNAL s, t, u, v : digits(5 DOWNTO 0);
+	SIGNAL isAdd : STD_LOGIC;
 BEGIN
+	oper_in <= b(1) & b(0);
 	main_state : ENTITY work.MainState(behaivioral)
 		PORT MAP(
 			clk => clk,
@@ -37,14 +38,14 @@ BEGIN
 			b_o => b_n,
 			state => state
 		);
-	convertor_a : ENTITY work.BinaryTo7SegmentDigits(flow)
+	convertor_a : ENTITY work.BcdTo7SegmentDigits(flow)
 		GENERIC MAP(N)
 		PORT MAP(
 			i => a_n,
 			o_0 => d(3),
 			o_1 => d(4),
 			o_sign => d(5));
-	convertor_b : ENTITY work.BinaryTo7SegmentDigits(flow)
+	convertor_b : ENTITY work.BcdTo7SegmentDigits(flow)
 		GENERIC MAP(N)
 		PORT MAP(
 			i => b_n,
@@ -56,7 +57,7 @@ BEGIN
 		PORT MAP(
 			clk => clk,
 			mode => state,
-			oper_i => b(1) & b(0),
+			oper_i => oper_in,
 			oper_o => oper
 		);
 	operator_conv : ENTITY work.OperatorTo7SegmentDigits(flow)
@@ -64,13 +65,23 @@ BEGIN
 			i => oper,
 			o => e
 		);
+	isAdd <= '0' WHEN oper = "00" ELSE
+		'1';
+	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
+		PORT MAP(a => a, b => b, m => isAdd, clk => clk, dsign => u(2), d1 => u(1), d0 => u(0));
+	multiplexer_operater : FOR i IN 0 TO 2 GENERATE
+		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, "0000000", "0000000", u(i), u(i),  v(i));
+	END GENERATE;
+	multiplexer_operater_empty : FOR i IN 3 TO 5 GENERATE
+		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, "1111111", "1111111", "1111111", "1111111", v(i));
+	END GENERATE;
 	digit : FOR i IN 0 TO 5 GENERATE
-		digit : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d(i), s(i));
+		digit : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, d(i), s(i));
 	END GENERATE;
 	letter : FOR i IN 0 TO 5 GENERATE
-		digit : ENTITY work.BcdTo7SegmentNumber(letter) PORT MAP(clk, e(i), t(i));
-	END GENERATE;
+		digit : ENTITY work.BcdTo7Segment(letter) PORT MAP(clk, e(i), t(i));
+	END GENERATE;	
 	multiplexer : FOR i IN 0 TO 5 GENERATE
-		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), t(i), "0000000", "0000000", o(i));
+		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), t(i), v(i), "1111111", o(i));
 	END GENERATE;
 END ARCHITECTURE;
