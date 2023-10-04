@@ -27,6 +27,7 @@ BEGIN
 		);
 	num_register : ENTITY work.SelectNum(flow)
 		PORT MAP(
+			clk => clk,
 			a_i => a,
 			b_i => b,
 			a_o => a_n,
