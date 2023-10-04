@@ -47,26 +47,15 @@ set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
-set_global_assignment -name VHDL_FILE Calculator.vhd
-set_global_assignment -name VHDL_FILE MainState.vhd
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name VHDL_FILE SelectNum.vhd
-set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
-set_global_assignment -name VHDL_FILE BcdTo7SegmentNumber.vhd
-set_global_assignment -name VHDL_FILE NumberConvertor.vhd
-set_global_assignment -name VHDL_FILE YAY.vhd
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk
 set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to rst
 set_location_assignment PIN_P11 -to clk
 set_location_assignment PIN_B8 -to rst
-set_global_assignment -name VHDL_FILE Multiplexer4To1.vhd
-set_global_assignment -name VHDL_FILE DigitMultiplexer.vhd
-set_global_assignment -name VHDL_FILE DigitsMultiplexer.vhd
-set_global_assignment -name VHDL_FILE BcdMultiplexer4To1.vhd
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to a[4]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to a[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to a[2]
@@ -180,3 +169,16 @@ set_location_assignment PIN_M20 -to o[5][4]
 set_location_assignment PIN_N19 -to o[5][5]
 set_location_assignment PIN_N20 -to o[5][6]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE BinaryTo7SegmentDigits.vhd
+set_global_assignment -name VHDL_FILE SelectOper.vhd
+set_global_assignment -name VHDL_FILE Calculator.vhd
+set_global_assignment -name VHDL_FILE MainState.vhd
+set_global_assignment -name VHDL_FILE SelectNum.vhd
+set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
+set_global_assignment -name VHDL_FILE BcdTo7SegmentNumber.vhd
+set_global_assignment -name VHDL_FILE YAY.vhd
+set_global_assignment -name VHDL_FILE Multiplexer4To1.vhd
+set_global_assignment -name VHDL_FILE DigitMultiplexer.vhd
+set_global_assignment -name VHDL_FILE DigitsMultiplexer.vhd
+set_global_assignment -name VHDL_FILE BcdMultiplexer4To1.vhd
+set_global_assignment -name VHDL_FILE OperatorTo7SegmentDigits.vhd

@@ -3,7 +3,7 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_unsigned.ALL;
 
-ENTITY NumberConvertor IS
+ENTITY BinaryTo7SegmentDigits IS
     GENERIC (N : INTEGER);
     PORT (
         i : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
@@ -11,7 +11,7 @@ ENTITY NumberConvertor IS
     );
 END ENTITY;
 
-ARCHITECTURE flow OF NumberConvertor IS
+ARCHITECTURE flow OF BinaryTo7SegmentDigits IS
     SIGNAL d1, d0 : INTEGER;
 BEGIN
     d1 <= to_integer(unsigned(i(N - 2 DOWNTO 0))) / 10;

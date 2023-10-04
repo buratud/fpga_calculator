@@ -34,14 +34,14 @@ BEGIN
 			b_o => b_n,
 			state => state
 		);
-	convertor_a : ENTITY work.NumberConvertor(flow)
+	convertor_a : ENTITY work.BinaryTo7SegmentDigits(flow)
 		GENERIC MAP(N)
 		PORT MAP(
 			i => a_n,
 			o_0 => d(3),
 			o_1 => d(4),
 			o_sign => d(5));
-	convertor_b : ENTITY work.NumberConvertor(flow)
+	convertor_b : ENTITY work.BinaryTo7SegmentDigits(flow)
 		GENERIC MAP(N)
 		PORT MAP(
 			i => b_n,
