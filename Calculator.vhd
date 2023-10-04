@@ -14,10 +14,10 @@ ENTITY Calculator IS
 END ENTITY;
 
 ARCHITECTURE flow OF Calculator IS
-	SIGNAL state : STD_LOGIC_VECTOR(1 DOWNTO 0);
+	SIGNAL state, oper : STD_LOGIC_VECTOR(1 DOWNTO 0);
 	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-	SIGNAL d: bcds(5 DOWNTO 0);
-	SIGNAL s: digits(5 DOWNTO 0);
+	SIGNAL d, e : bcds(5 DOWNTO 0);
+	SIGNAL s, t : digits(5 DOWNTO 0);
 
 BEGIN
 	main_state : ENTITY work.MainState(behaivioral)
@@ -51,10 +51,25 @@ BEGIN
 			o_1 => d(1),
 			o_sign => d(2)
 		);
+	operator_register : ENTITY work.SelectOper(selector)
+		PORT MAP(
+			clk => clk,
+			mode => state,
+			oper_i => b(1) & b(0),
+			oper_o => oper
+		);
+	operator_conv : ENTITY work.OperatorTo7SegmentDigits(flow)
+		PORT MAP(
+			i => oper,
+			o => e
+		);
 	digit : FOR i IN 0 TO 5 GENERATE
 		digit : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d(i), s(i));
 	END GENERATE;
+	letter : FOR i IN 0 TO 5 GENERATE
+		digit : ENTITY work.BcdTo7SegmentNumber(letter) PORT MAP(clk, e(i), t(i));
+	END GENERATE;
 	multiplexer : FOR i IN 0 TO 5 GENERATE
-		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), "0000000", "0000000", "0000000", o(i));
+		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), t(i), "0000000", "0000000", o(i));
 	END GENERATE;
 END ARCHITECTURE;
