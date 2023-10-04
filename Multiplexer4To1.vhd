@@ -1,5 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+
 ENTITY Multiplexer4To1 IS
     PORT (
         mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);

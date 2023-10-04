@@ -1,6 +1,5 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
 
 ENTITY SelectOper IS
     PORT (
@@ -12,7 +11,6 @@ ENTITY SelectOper IS
 END ENTITY;
 
 ARCHITECTURE selector OF SelectOper IS
-
 BEGIN
     PROCESS (clk)
     BEGIN

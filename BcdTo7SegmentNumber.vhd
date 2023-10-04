@@ -1,12 +1,11 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
-ENTITY BcdTo7SegmentNumber is
+ENTITY BcdTo7SegmentNumber IS
     PORT (
         clk : IN STD_LOGIC;
         i : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
         o : OUT STD_LOGIC_VECTOR (0 TO 6));
-
 END ENTITY;
 
 ARCHITECTURE number OF BcdTo7SegmentNumber IS
@@ -33,7 +32,7 @@ BEGIN
     END PROCESS;
 END ARCHITECTURE;
 
-ARCHITECTURE letter OF BcdTo7SegmentNumber is
+ARCHITECTURE letter OF BcdTo7SegmentNumber IS
 BEGIN
     PROCESS (clk) -- sensitivity list
     BEGIN
