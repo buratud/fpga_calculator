@@ -177,8 +177,6 @@ set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
 set_global_assignment -name VHDL_FILE BcdTo7SegmentNumber.vhd
 set_global_assignment -name VHDL_FILE YAY.vhd
 set_global_assignment -name VHDL_FILE Multiplexer4To1.vhd
-set_global_assignment -name VHDL_FILE DigitMultiplexer.vhd
-set_global_assignment -name VHDL_FILE DigitsMultiplexer.vhd
 set_global_assignment -name VHDL_FILE BcdMultiplexer4To1.vhd
 set_global_assignment -name VHDL_FILE OperatorTo7SegmentDigits.vhd
 set_global_assignment -name VHDL_FILE SevenSegmentMultiplexer4To1.vhd
