@@ -16,7 +16,9 @@ END ENTITY;
 ARCHITECTURE flow OF Calculator IS
 	SIGNAL state : STD_LOGIC_VECTOR(1 DOWNTO 0);
 	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-	SIGNAL d, s : bcds(5 DOWNTO 0);
+	SIGNAL d: bcds(5 DOWNTO 0);
+	SIGNAL s: digits(5 DOWNTO 0);
+
 BEGIN
 	main_state : ENTITY work.MainState(behaivioral)
 		PORT MAP(
@@ -49,10 +51,10 @@ BEGIN
 			o_1 => d(1),
 			o_sign => d(2)
 		);
-	multiplexer : FOR i IN 0 TO 5 GENERATE
-		multiplexer : ENTITY work.BcdMultiplexer4To1(selector) PORT MAP(state, d(i), "0000", "0000", "0000", s(i));
-	END GENERATE;
 	digit : FOR i IN 0 TO 5 GENERATE
-		digit : ENTITY work.BcdTo7SegmentNumber(letter) PORT MAP(clk, s(i), o(i));
+		digit : ENTITY work.BcdTo7SegmentNumber(number) PORT MAP(clk, d(i), s(i));
+	END GENERATE;
+	multiplexer : FOR i IN 0 TO 5 GENERATE
+		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), "0000000", "0000000", "0000000", o(i));
 	END GENERATE;
 END ARCHITECTURE;
