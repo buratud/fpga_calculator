@@ -10,8 +10,7 @@ ENTITY Calculator IS
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 		o : OUT digits(5 DOWNTO 0);
-		done: STD_LOGIC;
-		debug : OUT STD_LOGIC_VECTOR(9 DOWNTO 0)
+		done : OUT STD_LOGIC
 	);
 END ENTITY;
 
@@ -23,10 +22,6 @@ ARCHITECTURE flow OF Calculator IS
 	SIGNAL s, t, u, v : digits(5 DOWNTO 0);
 	SIGNAL isSubtract : STD_LOGIC;
 BEGIN
-	debug(1) <= state(1);
-	debug(0) <= state(0);
-	debug(3) <= oper(1);
-	debug(2) <= oper(0);
 	oper_in <= b(1) & b(0);
 	main_state : ENTITY work.MainState(behaivioral)
 		PORT MAP(
@@ -91,5 +86,6 @@ BEGIN
 	multiplexer : FOR i IN 0 TO 5 GENERATE
 		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), t(i), v(i), "1111111", o(i));
 	END GENERATE;
-	
+	done <= '1' WHEN state = "10" ELSE
+		'0';
 END ARCHITECTURE;
