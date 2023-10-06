@@ -184,4 +184,18 @@ set_global_assignment -name VHDL_FILE FullAdder.vhd
 set_global_assignment -name VHDL_FILE FullAdderGenerator.vhd
 set_global_assignment -name VHDL_FILE AdderSubtractor.vhd
 set_global_assignment -name VHDL_FILE BcdTo7Segment.vhd
+set_location_assignment PIN_A9 -to debug[1]
+set_location_assignment PIN_A8 -to debug[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[0]
+set_location_assignment PIN_A10 -to debug[2]
+set_location_assignment PIN_B10 -to debug[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to debug[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to debug[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to debug[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to debug[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to debug[9]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

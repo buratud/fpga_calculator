@@ -11,31 +11,23 @@ ARCHITECTURE behaivioral OF MainState IS
 	TYPE state_type IS (S_N, S_O, S_F);
 	SIGNAL state : state_type := S_N;
 BEGIN
-	PROCESS (clk, rst)
+	PROCESS (rst, i)
 	BEGIN
-		IF rst = '0' THEN
+		IF rst = '1' THEN
 			state <= S_N;
-		ELSIF rising_edge(clk) THEN
+		ELSIF rising_edge(i) THEN
 			CASE state IS
 				WHEN S_N =>
-					IF (i = '0') THEN
-						o <= "00";
-					ELSE
-						state <= S_O;
-					END IF;
+					state <= S_O;
 				WHEN S_O =>
-					IF (i = '0') THEN
-						o <= "01";
-					ELSE
-						state <= S_F;
-					END IF;
+					state <= S_F;
 				WHEN S_F =>
-					IF (i = '0') THEN
-						o <= "10";
-					ELSE
-						state <= S_F;
-					END IF;
+					state <= S_F;
 			END CASE;
 		END IF;
 	END PROCESS;
+	WITH state SELECT
+		o <= "00" WHEN S_N,
+		"01" WHEN S_O,
+		"10" WHEN OTHERS;
 END ARCHITECTURE;

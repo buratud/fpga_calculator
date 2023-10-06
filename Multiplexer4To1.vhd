@@ -14,6 +14,6 @@ BEGIN
     WITH mode SELECT
         o <= i(0) WHEN "00",
         i(1) WHEN "01",
-        i(2) WHEN "11",
+        i(2) WHEN "10",
         i(3) WHEN OTHERS;
 END ARCHITECTURE;
