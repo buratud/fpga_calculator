@@ -1,7 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
-ENTITY SignDetecter IS
+ENTITY Complementer IS
     GENERIC (
         N : INTEGER := 5
     );
@@ -11,16 +11,15 @@ ENTITY SignDetecter IS
     );
 END ENTITY;
 
-ARCHITECTURE structural OF SignDetecter IS
+ARCHITECTURE structural OF Complementer IS
     SIGNAL zeros : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
     SIGNAL complemented : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 BEGIN
-    adder : ENTITY work.Complementer(structural) GENERIC MAP (N)
+    adder : ENTITY work.FullAdderGenerator(structural) GENERIC MAP (N)
         PORT MAP(
-            i => i,
-            o => complemented
+            a => zeros,
+            b => i,
+            m => '1',
+            s => o
         );
-    WITH i(N - 1) SELECT
-    o <= i WHEN '0',
-        complemented WHEN OTHERS;
 END ARCHITECTURE;
