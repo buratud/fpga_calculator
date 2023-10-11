@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "MAX 10"
 set_global_assignment -name DEVICE 10M50DAF484C7G
-set_global_assignment -name TOP_LEVEL_ENTITY Calculator
+set_global_assignment -name TOP_LEVEL_ENTITY Multiplicator
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "09:50:58  OCTOBER 02, 2023"
 set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
@@ -49,13 +49,86 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_location_assignment PIN_P11 -to clk
+set_location_assignment PIN_B8 -to rst
+set_location_assignment PIN_A7 -to trig
+set_location_assignment PIN_B12 -to a[0]
+set_location_assignment PIN_A13 -to a[1]
+set_location_assignment PIN_A14 -to a[2]
+set_location_assignment PIN_B14 -to a[3]
+set_location_assignment PIN_F15 -to a[4]
+set_location_assignment PIN_C10 -to b[0]
+set_location_assignment PIN_C11 -to b[1]
+set_location_assignment PIN_D12 -to b[2]
+set_location_assignment PIN_C12 -to b[3]
+set_location_assignment PIN_A12 -to b[4]
+set_location_assignment PIN_C14 -to o[0][0]
+set_location_assignment PIN_E15 -to o[0][1]
+set_location_assignment PIN_C15 -to o[0][2]
+set_location_assignment PIN_C16 -to o[0][3]
+set_location_assignment PIN_E16 -to o[0][4]
+set_location_assignment PIN_D17 -to o[0][5]
+set_location_assignment PIN_C17 -to o[0][6]
+set_location_assignment PIN_C18 -to o[1][0]
+set_location_assignment PIN_D18 -to o[1][1]
+set_location_assignment PIN_E18 -to o[1][2]
+set_location_assignment PIN_B16 -to o[1][3]
+set_location_assignment PIN_A17 -to o[1][4]
+set_location_assignment PIN_A18 -to o[1][5]
+set_location_assignment PIN_B17 -to o[1][6]
+set_location_assignment PIN_B20 -to o[2][0]
+set_location_assignment PIN_A20 -to o[2][1]
+set_location_assignment PIN_B19 -to o[2][2]
+set_location_assignment PIN_A21 -to o[2][3]
+set_location_assignment PIN_B21 -to o[2][4]
+set_location_assignment PIN_C22 -to o[2][5]
+set_location_assignment PIN_B22 -to o[2][6]
+set_location_assignment PIN_F21 -to o[3][0]
+set_location_assignment PIN_E22 -to o[3][1]
+set_location_assignment PIN_E21 -to o[3][2]
+set_location_assignment PIN_C19 -to o[3][3]
+set_location_assignment PIN_C20 -to o[3][4]
+set_location_assignment PIN_D19 -to o[3][5]
+set_location_assignment PIN_E17 -to o[3][6]
+set_location_assignment PIN_F18 -to o[4][0]
+set_location_assignment PIN_E20 -to o[4][1]
+set_location_assignment PIN_E19 -to o[4][2]
+set_location_assignment PIN_J18 -to o[4][3]
+set_location_assignment PIN_H19 -to o[4][4]
+set_location_assignment PIN_F19 -to o[4][5]
+set_location_assignment PIN_F20 -to o[4][6]
+set_location_assignment PIN_J20 -to o[5][0]
+set_location_assignment PIN_K20 -to o[5][1]
+set_location_assignment PIN_L18 -to o[5][2]
+set_location_assignment PIN_N18 -to o[5][3]
+set_location_assignment PIN_M20 -to o[5][4]
+set_location_assignment PIN_N19 -to o[5][5]
+set_location_assignment PIN_N20 -to o[5][6]
+set_location_assignment PIN_A8 -to done
+set_global_assignment -name VHDL_FILE BcdTo7Segment3D1S.vhd
+set_global_assignment -name VHDL_FILE SignDetecter.vhd
+set_global_assignment -name VHDL_FILE BcdTo7SegmentDigits.vhd
+set_global_assignment -name VHDL_FILE SelectOper.vhd
+set_global_assignment -name VHDL_FILE Calculator.vhd
+set_global_assignment -name VHDL_FILE MainState.vhd
+set_global_assignment -name VHDL_FILE SelectNum.vhd
+set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
+set_global_assignment -name VHDL_FILE YAY.vhd
+set_global_assignment -name VHDL_FILE Multiplexer4To1.vhd
+set_global_assignment -name VHDL_FILE BcdMultiplexer4To1.vhd
+set_global_assignment -name VHDL_FILE OperatorTo7SegmentDigits.vhd
+set_global_assignment -name VHDL_FILE SevenSegmentMultiplexer4To1.vhd
+set_global_assignment -name VHDL_FILE FullAdder.vhd
+set_global_assignment -name VHDL_FILE FullAdderGenerator.vhd
+set_global_assignment -name VHDL_FILE AdderSubtractor.vhd
+set_global_assignment -name VHDL_FILE BcdTo7Segment.vhd
+set_global_assignment -name VHDL_FILE Multiplicator.vhd
+set_global_assignment -name VHDL_FILE Complementer.vhd
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk
 set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to rst
-set_location_assignment PIN_P11 -to clk
-set_location_assignment PIN_B8 -to rst
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to a[4]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to a[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to a[2]
@@ -115,59 +188,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to o[5][4]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to o[5][5]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to o[5][6]
 set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to trig
-set_location_assignment PIN_A7 -to trig
-set_location_assignment PIN_B12 -to a[0]
-set_location_assignment PIN_A13 -to a[1]
-set_location_assignment PIN_A14 -to a[2]
-set_location_assignment PIN_B14 -to a[3]
-set_location_assignment PIN_F15 -to a[4]
-set_location_assignment PIN_C10 -to b[0]
-set_location_assignment PIN_C11 -to b[1]
-set_location_assignment PIN_D12 -to b[2]
-set_location_assignment PIN_C12 -to b[3]
-set_location_assignment PIN_A12 -to b[4]
-set_location_assignment PIN_C14 -to o[0][0]
-set_location_assignment PIN_E15 -to o[0][1]
-set_location_assignment PIN_C15 -to o[0][2]
-set_location_assignment PIN_C16 -to o[0][3]
-set_location_assignment PIN_E16 -to o[0][4]
-set_location_assignment PIN_D17 -to o[0][5]
-set_location_assignment PIN_C17 -to o[0][6]
-set_location_assignment PIN_C18 -to o[1][0]
-set_location_assignment PIN_D18 -to o[1][1]
-set_location_assignment PIN_E18 -to o[1][2]
-set_location_assignment PIN_B16 -to o[1][3]
-set_location_assignment PIN_A17 -to o[1][4]
-set_location_assignment PIN_A18 -to o[1][5]
-set_location_assignment PIN_B17 -to o[1][6]
-set_location_assignment PIN_B20 -to o[2][0]
-set_location_assignment PIN_A20 -to o[2][1]
-set_location_assignment PIN_B19 -to o[2][2]
-set_location_assignment PIN_A21 -to o[2][3]
-set_location_assignment PIN_B21 -to o[2][4]
-set_location_assignment PIN_C22 -to o[2][5]
-set_location_assignment PIN_B22 -to o[2][6]
-set_location_assignment PIN_F21 -to o[3][0]
-set_location_assignment PIN_E22 -to o[3][1]
-set_location_assignment PIN_E21 -to o[3][2]
-set_location_assignment PIN_C19 -to o[3][3]
-set_location_assignment PIN_C20 -to o[3][4]
-set_location_assignment PIN_D19 -to o[3][5]
-set_location_assignment PIN_E17 -to o[3][6]
-set_location_assignment PIN_F18 -to o[4][0]
-set_location_assignment PIN_E20 -to o[4][1]
-set_location_assignment PIN_E19 -to o[4][2]
-set_location_assignment PIN_J18 -to o[4][3]
-set_location_assignment PIN_H19 -to o[4][4]
-set_location_assignment PIN_F19 -to o[4][5]
-set_location_assignment PIN_F20 -to o[4][6]
-set_location_assignment PIN_J20 -to o[5][0]
-set_location_assignment PIN_K20 -to o[5][1]
-set_location_assignment PIN_L18 -to o[5][2]
-set_location_assignment PIN_N18 -to o[5][3]
-set_location_assignment PIN_M20 -to o[5][4]
-set_location_assignment PIN_N19 -to o[5][5]
-set_location_assignment PIN_N20 -to o[5][6]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[4]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[2]
@@ -179,24 +199,5 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[7]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[6]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to debug[9]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to done
-set_location_assignment PIN_A8 -to done
-set_global_assignment -name VHDL_FILE BcdTo7Segment3D1S.vhd
-set_global_assignment -name VHDL_FILE SignDetecter.vhd
-set_global_assignment -name VHDL_FILE BcdTo7SegmentDigits.vhd
-set_global_assignment -name VHDL_FILE SelectOper.vhd
-set_global_assignment -name VHDL_FILE Calculator.vhd
-set_global_assignment -name VHDL_FILE MainState.vhd
-set_global_assignment -name VHDL_FILE SelectNum.vhd
-set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
-set_global_assignment -name VHDL_FILE YAY.vhd
-set_global_assignment -name VHDL_FILE Multiplexer4To1.vhd
-set_global_assignment -name VHDL_FILE BcdMultiplexer4To1.vhd
-set_global_assignment -name VHDL_FILE OperatorTo7SegmentDigits.vhd
-set_global_assignment -name VHDL_FILE SevenSegmentMultiplexer4To1.vhd
-set_global_assignment -name VHDL_FILE FullAdder.vhd
-set_global_assignment -name VHDL_FILE FullAdderGenerator.vhd
-set_global_assignment -name VHDL_FILE AdderSubtractor.vhd
-set_global_assignment -name VHDL_FILE BcdTo7Segment.vhd
-set_global_assignment -name VHDL_FILE Multiplicator.vhd
-set_global_assignment -name VHDL_FILE Complementer.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE divider.vhd
