@@ -5,7 +5,7 @@ USE ieee.std_logic_unsigned.ALL;
 USE work.YAY.ALL;
 
 ENTITY Calculator IS
-	GENERIC (N : INTEGER := 5);
+	GENERIC (N : INTEGER := 5 );
 	PORT (
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
@@ -20,10 +20,11 @@ ARCHITECTURE flow OF Calculator IS
 	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 	SIGNAL mul_res : STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0);
 	SIGNAL d, e, mdb : bcds(5 DOWNTO 0);
-	SIGNAL s, t, u, v, md : digits(5 DOWNTO 0);
+	SIGNAL de, dv, div_done : STD_LOGIC;
+	SIGNAL s, t, u, v, md, dd : digits(5 DOWNTO 0);
 	SIGNAL isSubtract, mul_done ,temp_v,temp_e: STD_LOGIC;
 	signal temp_quotient : STD_LOGIC_VECTOR(N-1 DOWNTO 0);
-	signal temp_remainder :STD_LOGIC_VECTOR(2*N-1 downto 0);
+	signal temp_remainder :STD_LOGIC_VECTOR(N-1 downto 0);
 BEGIN
 	oper_in <= b(1) & b(0);
 	main_state : ENTITY work.MainState(behaivioral)
@@ -92,11 +93,22 @@ BEGIN
 	u(5) <= "1111111";
 	md(4) <= "1111111";
 	md(5) <= "1111111";
+	divider : ENTITY work.Divider(behavioral) GENERIC MAP (N) PORT MAP (
+		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
+		dividend => a_n,
+		divisor => b_n,
+		quotient => temp_quotient,
+		remainder_v2 => temp_remainder,
+		e => de,
+		v => dv,
+		done => div_done
+		);
+	div_conv : ENTITY work.BcdTo7SegmentForDivider(behaivioral) GENERIC MAP(N) PORT MAP(clk => clk, q => temp_quotient, r => temp_remainder, e => de, v => dv, o => dd);
 	mul_digit_conv : FOR i IN 0 TO 3 GENERATE
 		conv : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, mdb(i), md(i));
 	END GENERATE;
 	multiplexer_operater : FOR i IN 0 TO 5 GENERATE
-		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, "0000000", md(i), u(i), u(i), v(i));
+		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, dd(i), md(i), u(i), u(i), v(i));
 	END GENERATE;
 	digit : FOR i IN 0 TO 5 GENERATE
 		digit : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, d(i), s(i));
