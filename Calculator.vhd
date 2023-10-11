@@ -21,7 +21,9 @@ ARCHITECTURE flow OF Calculator IS
 	SIGNAL mul_res : STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0);
 	SIGNAL d, e, mdb : bcds(5 DOWNTO 0);
 	SIGNAL s, t, u, v, md : digits(5 DOWNTO 0);
-	SIGNAL isSubtract, mul_done : STD_LOGIC;
+	SIGNAL isSubtract, mul_done ,temp_v,temp_e: STD_LOGIC;
+	signal temp_quotient : STD_LOGIC_VECTOR(N-1 DOWNTO 0);
+	signal temp_remainder :STD_LOGIC_VECTOR(2*N-1 downto 0);
 BEGIN
 	oper_in <= b(1) & b(0);
 	main_state : ENTITY work.MainState(behaivioral)
@@ -73,7 +75,7 @@ BEGIN
 	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
 		PORT MAP(a => a_n, b => b_n, m => isSubtract, clk => clk, dsign => u(2), d1 => u(1), d0 => u(0));
 	multiplicator : ENTITY work.Multiplicator(behavioral) GENERIC MAP (N) PORT MAP (
-		clk => clk, rst => rst, trig => NOT oper(1) AND oper(0),
+		clk		 => clk, rst => rst, trig => NOT oper(1) AND oper(0),
 		a => a_n,
 		b => b_n,
 		o => mul_res,
@@ -87,10 +89,11 @@ BEGIN
 			trig => NOT oper(1) AND oper(0),
 			dividend => a_n,
 			divisor => b_n,
-			quotient => ,
-			remainder => ,
-			done => mul_done
-			
+			quotient => temp_quotient,
+			remainder => temp_remainder,
+			done => mul_done,
+			e => temp_e,
+			v => temp_v	
 		);
 	mul_res_conv : ENTITY work.BcdTo7Segment3D1S(flow) GENERIC MAP(2 * N) PORT MAP(i => mul_res, v => '0', o_sign => mdb(3), o_2 => mdb(2), o_1 => mdb(1), o_0 => mdb(0));
 	u(3) <= "1111111";
@@ -98,6 +101,21 @@ BEGIN
 	u(5) <= "1111111";
 	md(4) <= "1111111";
 	md(5) <= "1111111";
+
+	mul_divider_quotient_conv : entity work.BcdTo7SegmentDigits(flow) generic map (N) port map (	
+		i => temp_quotient,
+		v => '0',
+		o_1 => mdb(4),
+		o_0 => mdb(3), 
+		o_sign => mdb(5)
+	);
+	mul_divider_remainder_conv : entity work.BcdTo7SegmentDigits(flow) generic map (N) port map (	
+		i => (),
+		v => '0',
+		o_1 => mdb(4),
+		o_0 => mdb(3), 
+		o_sign => mdb(5)
+	);
 	mul_digit_conv: FOR i IN 0 TO 3 GENERATE
 		conv : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, mdb(i), md(i));
 	END GENERATE;
