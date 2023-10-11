@@ -8,9 +8,11 @@ ENTITY divider IS
     PORT (
         clk, rst, trig : IN STD_LOGIC;
         dividend, divisor : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        quotient, debug : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
-        remainder : OUT STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0) := (OTHERS => '0');
-        done, e, v : OUT STD_LOGIC);
+        quotient : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
+        remainder :  out STD_LOGIC_VECTOR( 2*N - 1 DOWNTO 0) := (OTHERS => '0'); -- not send 
+        done, e, v : OUT STD_LOGIC;
+        remainder_v2 : out std_logic_vector(N-1 downto 0) := (OTHERS => '0'));
+        
 END ENTITY;
 
 ARCHITECTURE rtl OF divider IS
@@ -27,7 +29,6 @@ ARCHITECTURE rtl OF divider IS
     SIGNAL one : STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (0 => '1', OTHERS => '0');
     SIGNAL isNeg : STD_LOGIC;
 BEGIN
-    debug <= one;
     subtractor : ENTITY work.FullAdderGenerator(structural) GENERIC MAP (2 * N) PORT MAP(tr, td, '1', ts);
     n1 : ENTITY work.SignDetecter(structural) GENERIC MAP(N) PORT MAP(dividend, ndd);
     n2 : ENTITY work.SignDetecter(structural) GENERIC MAP(N) PORT MAP(divisor, ndv);
@@ -87,6 +88,8 @@ BEGIN
                                     ELSE
                                         tq <= NOT(tq) + '1';
                                     END IF;
+                                ELSIF divisor(divisor'high) = '1' THEN
+                                    tr <= NOT(tr) + '1';
                                 END IF;
                                 state <= SD;
                             END IF;
@@ -101,4 +104,5 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
+    chnage_bit : entity work.change2NToNbit(bhv) GENERIC MAP(N) PORT MAP(i => tr,o => remainder_v2);
 END ARCHITECTURE;
