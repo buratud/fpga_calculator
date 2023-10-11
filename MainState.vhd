@@ -15,28 +15,26 @@ ARCHITECTURE behaivioral OF MainState IS
 BEGIN
 	PROCESS (clk)
 	BEGIN
-		IF rising_edge(clk) THEN
-			IF rst = '0' AND lastRst = '1' THEN
-				state <= S_N;
-			ELSE
-				CASE state IS
-					WHEN S_N =>
-						IF i = '0' AND last = '1' THEN
-							state <= S_O;
-						END IF;
-					WHEN S_O =>
-						IF i = '0' AND last = '1' THEN
-							state <= S_F;
-						END IF;
-					WHEN S_F =>
-						IF i = '0' AND last = '1' THEN
-							state <= S_F;
-						END IF;
-				END CASE;
-			END IF;
-			lastRst <= rst;
-			last <= i;
+		IF rst = '0' AND lastRst = '1' THEN
+			state <= S_N;
+		ELSIF rising_edge(clk) THEN
+			CASE state IS
+				WHEN S_N =>
+					IF i = '0' AND last = '1' THEN
+						state <= S_O;
+					END IF;
+				WHEN S_O =>
+					IF i = '0' AND last = '1' THEN
+						state <= S_F;
+					END IF;
+				WHEN S_F =>
+					IF i = '0' AND last = '1' THEN
+						state <= S_F;
+					END IF;
+			END CASE;
 		END IF;
+		lastRst <= rst;
+		last <= i;
 	END PROCESS;
 	WITH state SELECT
 		o <= "00" WHEN S_N,

@@ -87,19 +87,7 @@ BEGIN
 		done => mul_done
 		);
 	
-	divider : entity work.divider(rtl) GENERIC MAP (N)
-		port map(
-			clk => clk,
-			rst => rst,
-			trig => NOT oper(1) AND oper(0),
-			dividend => a_n,
-			divisor => b_n,
-			quotient => temp_quotient,
-			remainder => temp_remainder,
-			done => mul_done,
-			e => temp_e,
-			v => temp_v	
-		);
+
 	mul_res_conv : ENTITY work.BcdTo7Segment3D1S(flow) GENERIC MAP(2 * N) PORT MAP(i => mul_res, v => '0', o_sign => mdb(3), o_2 => mdb(2), o_1 => mdb(1), o_0 => mdb(0));
 	u(3) <= "1111111";
 	u(4) <= "1111111";
