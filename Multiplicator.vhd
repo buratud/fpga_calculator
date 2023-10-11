@@ -30,12 +30,6 @@ BEGIN
     BEGIN
         IF rst = '1' THEN
             state <= s0;
-            da <= (OTHERS => '0');
-            db <= (OTHERS => '0');
-            dp <= (OTHERS => '0');
-            done <= '0';
-            o <= (OTHERS => '0');
-            bit_counter <= 0;
         ELSIF rising_edge(clk) THEN
             CASE state IS
                 WHEN s0 =>
@@ -44,8 +38,13 @@ BEGIN
                         db <= cb;
                         state <= S1;
                     ELSE
+                        da <= (OTHERS => '0');
+                        db <= (OTHERS => '0');
+                        dp <= (OTHERS => '0');
+                        done <= '0';
                         state <= S0;
                         done <= '0';
+                        bit_counter <= 0;
                     END IF;
                 WHEN S1 =>
                     IF bit_counter <= N THEN

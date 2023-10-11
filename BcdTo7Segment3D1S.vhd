@@ -20,7 +20,7 @@ BEGIN
     d2 <= to_integer(unsigned(neutralized)) / 100 MOD 10;
     d1 <= to_integer(unsigned(neutralized)) / 10 MOD 10;
     d0 <= to_integer(unsigned(neutralized)) MOD 10;
-    o_2 <= STD_LOGIC_VECTOR(to_unsigned(d1, 4)) WHEN v = '0' ELSE
+    o_2 <= STD_LOGIC_VECTOR(to_unsigned(d2, 4)) WHEN v = '0' ELSE
         "1111";
     o_1 <= STD_LOGIC_VECTOR(to_unsigned(d1, 4)) WHEN v = '0' ELSE
         "1111";

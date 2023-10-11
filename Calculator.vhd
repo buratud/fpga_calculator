@@ -80,14 +80,12 @@ BEGIN
 	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
 		PORT MAP(a => a_n, b => b_n, m => isSubtract, clk => clk, dsign => u(2), d1 => u(1), d0 => u(0));
 	multiplicator : ENTITY work.Multiplicator(behavioral) GENERIC MAP (N) PORT MAP (
-		clk => clk, rst => rst, trig => (NOT state(1)) AND state(0),
+		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
 		a => a_n,
 		b => b_n,
 		o => mul_res,
 		done => mul_done
 		);
-	
-
 	mul_res_conv : ENTITY work.BcdTo7Segment3D1S(flow) GENERIC MAP(2 * N) PORT MAP(i => mul_res, v => '0', o_sign => mdb(3), o_2 => mdb(2), o_1 => mdb(1), o_0 => mdb(0));
 	u(3) <= "1111111";
 	u(4) <= "1111111";
