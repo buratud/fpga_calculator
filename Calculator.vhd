@@ -9,7 +9,7 @@ ENTITY Calculator IS
 	PORT (
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-		o : OUT digits(5 DOWNTO 0);
+		o5, o4, o3, o2, o1, o0 : OUT STD_LOGIC_VECTOR(0 TO 6);
 		done : OUT STD_LOGIC
 	);
 END ENTITY;
@@ -66,14 +66,19 @@ BEGIN
 	operator_conv : ENTITY work.OperatorTo7SegmentDigits(flow)
 		PORT MAP(
 			i => oper,
-			o => e
+			o5 => e(5),
+			o4 => e(4),
+			o3 => e(3),
+			o2 => e(2),
+			o1 => e(1),
+			o0 => e(0)
 		);
 	isSubtract <= '1' WHEN oper = "10" ELSE
 		'0';
 	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
 		PORT MAP(a => a_n, b => b_n, m => isSubtract, clk => clk, dsign => u(2), d1 => u(1), d0 => u(0));
 	multiplicator : ENTITY work.Multiplicator(behavioral) GENERIC MAP (N) PORT MAP (
-		clk => clk, rst => rst, trig => NOT oper(1) AND oper(0),
+		clk => clk, rst => rst, trig => (NOT state(1)) AND state(0),
 		a => a_n,
 		b => b_n,
 		o => mul_res,
@@ -85,7 +90,7 @@ BEGIN
 	u(5) <= "1111111";
 	md(4) <= "1111111";
 	md(5) <= "1111111";
-	mul_digit_conv: FOR i IN 0 TO 3 GENERATE
+	mul_digit_conv : FOR i IN 0 TO 3 GENERATE
 		conv : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, mdb(i), md(i));
 	END GENERATE;
 	multiplexer_operater : FOR i IN 0 TO 5 GENERATE
@@ -97,9 +102,12 @@ BEGIN
 	letter : FOR i IN 0 TO 5 GENERATE
 		letter : ENTITY work.BcdTo7Segment(letter) PORT MAP(clk, e(i), t(i));
 	END GENERATE;
-	multiplexer : FOR i IN 0 TO 5 GENERATE
-		multiplexer : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(i), t(i), v(i), "1111111", o(i));
-	END GENERATE;
+		multiplexer_0 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(0), t(0), v(0), "1111111", o0);
+		multiplexer_1 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(1), t(1), v(1), "1111111", o1);
+		multiplexer_2 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(2), t(2), v(2), "1111111", o2);
+		multiplexer_3 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(3), t(3), v(3), "1111111", o3);
+		multiplexer_4 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(4), t(4), v(4), "1111111", o4);
+		multiplexer_5 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(5), t(5), v(5), "1111111", o5);
 	done <= '1' WHEN state = "10" ELSE
 		'0';
 END ARCHITECTURE;

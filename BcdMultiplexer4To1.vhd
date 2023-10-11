@@ -1,13 +1,12 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-USE work.YAY.ALL;
 
 ENTITY BcdMultiplexer4To1 IS
     PORT (
         mode : STD_LOGIC_VECTOR(1 DOWNTO 0);
-        i0, i1, i2, i3 : IN bcd;
-        o : OUT bcd
+        i0, i1, i2, i3 : IN STD_LOGIC_VECTOR(3 downto 0);
+        o : OUT STD_LOGIC_VECTOR(3 downto 0)
     );
 END ENTITY;
 
