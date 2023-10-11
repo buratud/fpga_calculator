@@ -8,36 +8,36 @@ ENTITY MainState IS
 END ENTITY;
 
 ARCHITECTURE behaivioral OF MainState IS
-	TYPE state_type IS (S_N, S_O, S_F);
-	SIGNAL state : state_type := S_N;
+	TYPE state_type IS (SN, SO, SF);
+	SIGNAL state : state_type := SN;
 	SIGNAL last : STD_LOGIC := i;
-	SIGNAL lastRst : STD_LOGIC := rst;
 BEGIN
-	PROCESS (clk)
+	PROCESS (clk, rst)
 	BEGIN
-		IF rst = '0' AND lastRst = '1' THEN
-			state <= S_N;
+		IF rst = '1' THEN
+			state <= SN;
 		ELSIF rising_edge(clk) THEN
 			CASE state IS
-				WHEN S_N =>
+				WHEN SN =>
 					IF i = '0' AND last = '1' THEN
-						state <= S_O;
+						state <= SO;
+					ELSE
+						o <= "00";
 					END IF;
-				WHEN S_O =>
+				WHEN SO =>
 					IF i = '0' AND last = '1' THEN
-						state <= S_F;
+						state <= SF;
+					ELSE
+						o <= "01";
 					END IF;
-				WHEN S_F =>
+				WHEN SF =>
 					IF i = '0' AND last = '1' THEN
-						state <= S_F;
+						state <= SF;
+					ELSE
+						o <= "10";
 					END IF;
 			END CASE;
+			last <= i;
 		END IF;
-		lastRst <= rst;
-		last <= i;
 	END PROCESS;
-	WITH state SELECT
-		o <= "00" WHEN S_N,
-		"01" WHEN S_O,
-		"10" WHEN OTHERS;
 END ARCHITECTURE;
