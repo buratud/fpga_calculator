@@ -12,7 +12,6 @@ ENTITY Divider IS
         remainder : OUT STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0) := (OTHERS => '0'); -- not send 
         done, e, v : OUT STD_LOGIC;
         remainder_v2 : OUT STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0'));
-
 END ENTITY;
 
 ARCHITECTURE behavioral OF Divider IS
