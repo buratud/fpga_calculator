@@ -89,17 +89,18 @@ BEGIN
 		done => mul_done,
 		d5 => md(5), d4 => md(4), d3 => md(3), d2 => md(2), d1 => md(1), d0 => md(0)
 		);
-	divider : ENTITY work.Divider(behavioral) GENERIC MAP (N) PORT MAP (
+	divider : ENTITY work.DividerTo7Segment(structural) GENERIC MAP (N) PORT MAP (
 		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
-		dividend => a_n,
-		divisor => b_n,
-		quotient => temp_quotient,
-		remainder_v2 => temp_remainder,
-		e => de,
-		v => dv,
-		done => div_done
+		a => a_n,
+		b => b_n,
+		done => div_done,
+		d5 => dd(5),
+		d4 => dd(4),
+		d3 => dd(3),
+		d2 => dd(2),
+		d1 => dd(1),
+		d0 => dd(0)
 		);
-	div_conv : ENTITY work.BcdTo7SegmentForDivider(behaivioral) GENERIC MAP(N) PORT MAP(clk => clk, q => temp_quotient, r => temp_remainder, e => de, v => dv, o => dd);
 	multiplexer_operater : FOR i IN 0 TO 5 GENERATE
 		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, dd(i), md(i), u(i), u(i), v(i));
 	END GENERATE;
