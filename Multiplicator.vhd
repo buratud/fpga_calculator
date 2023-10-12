@@ -10,7 +10,7 @@ ENTITY Multiplicator IS
         a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0) := (OTHERS => '0');
         o : OUT STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0) := (OTHERS => '0');
         done : OUT STD_LOGIC := '0');
-END Multiplicator;
+END ENTITY;
 
 ARCHITECTURE behavioral OF Multiplicator IS
     TYPE state_type IS (s0, s1, s2);
@@ -68,4 +68,4 @@ BEGIN
             END CASE;
         END IF;
     END PROCESS;
-END behavioral;
+END ARCHITECTURE;
