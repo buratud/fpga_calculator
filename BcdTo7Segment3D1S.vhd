@@ -8,7 +8,7 @@ ENTITY BcdTo7Segment3D1S IS
     PORT (
         i : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
         v : IN STD_LOGIC := '0';
-        o_2, o_1, o_0, o_sign : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        o_sign, o_2, o_1, o_0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END ENTITY;
 

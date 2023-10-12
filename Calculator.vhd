@@ -5,7 +5,7 @@ USE ieee.std_logic_unsigned.ALL;
 USE work.YAY.ALL;
 
 ENTITY Calculator IS
-	GENERIC (N : INTEGER := 5 );
+	GENERIC (N : INTEGER := 5);
 	PORT (
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
@@ -22,9 +22,9 @@ ARCHITECTURE flow OF Calculator IS
 	SIGNAL d, e, mdb : bcds(5 DOWNTO 0);
 	SIGNAL de, dv, div_done : STD_LOGIC;
 	SIGNAL s, t, u, v, md, dd : digits(5 DOWNTO 0);
-	SIGNAL isSubtract, mul_done ,temp_v,temp_e: STD_LOGIC;
-	signal temp_quotient : STD_LOGIC_VECTOR(N-1 DOWNTO 0);
-	signal temp_remainder :STD_LOGIC_VECTOR(N-1 downto 0);
+	SIGNAL isSubtract, mul_done, temp_v, temp_e : STD_LOGIC;
+	SIGNAL temp_quotient : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
+	SIGNAL temp_remainder : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 BEGIN
 	oper_in <= b(1) & b(0);
 	main_state : ENTITY work.MainState(behaivioral)
@@ -79,20 +79,16 @@ BEGIN
 	isSubtract <= '1' WHEN oper = "10" ELSE
 		'0';
 	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
-		PORT MAP(a => a_n, b => b_n, m => isSubtract, clk => clk, dsign => u(2), d1 => u(1), d0 => u(0));
-	multiplicator : ENTITY work.Multiplicator(behavioral) GENERIC MAP (N) PORT MAP (
+		PORT MAP(
+			a => a_n, b => b_n, m => isSubtract, clk => clk,
+			d5 => u(5), d4 => u(4), d3 => u(3), d2 => u(2), d1 => u(1), d0 => u(0));
+	multiplicator : ENTITY work.Multiplier(structural) GENERIC MAP (N) PORT MAP (
 		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
 		a => a_n,
 		b => b_n,
-		o => mul_res,
-		done => mul_done
+		done => mul_done,
+		d5 => md(5), d4 => md(4), d3 => md(3), d2 => md(2), d1 => md(1), d0 => md(0)
 		);
-	mul_res_conv : ENTITY work.BcdTo7Segment3D1S(flow) GENERIC MAP(2 * N) PORT MAP(i => mul_res, v => '0', o_sign => mdb(3), o_2 => mdb(2), o_1 => mdb(1), o_0 => mdb(0));
-	u(3) <= "1111111";
-	u(4) <= "1111111";
-	u(5) <= "1111111";
-	md(4) <= "1111111";
-	md(5) <= "1111111";
 	divider : ENTITY work.Divider(behavioral) GENERIC MAP (N) PORT MAP (
 		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
 		dividend => a_n,
@@ -104,9 +100,6 @@ BEGIN
 		done => div_done
 		);
 	div_conv : ENTITY work.BcdTo7SegmentForDivider(behaivioral) GENERIC MAP(N) PORT MAP(clk => clk, q => temp_quotient, r => temp_remainder, e => de, v => dv, o => dd);
-	mul_digit_conv : FOR i IN 0 TO 3 GENERATE
-		conv : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, mdb(i), md(i));
-	END GENERATE;
 	multiplexer_operater : FOR i IN 0 TO 5 GENERATE
 		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, dd(i), md(i), u(i), u(i), v(i));
 	END GENERATE;
@@ -116,12 +109,12 @@ BEGIN
 	letter : FOR i IN 0 TO 5 GENERATE
 		letter : ENTITY work.BcdTo7Segment(letter) PORT MAP(clk, e(i), t(i));
 	END GENERATE;
-		multiplexer_0 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(0), t(0), v(0), "1111111", o0);
-		multiplexer_1 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(1), t(1), v(1), "1111111", o1);
-		multiplexer_2 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(2), t(2), v(2), "1111111", o2);
-		multiplexer_3 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(3), t(3), v(3), "1111111", o3);
-		multiplexer_4 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(4), t(4), v(4), "1111111", o4);
-		multiplexer_5 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(5), t(5), v(5), "1111111", o5);
+	multiplexer_0 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(0), t(0), v(0), "1111111", o0);
+	multiplexer_1 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(1), t(1), v(1), "1111111", o1);
+	multiplexer_2 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(2), t(2), v(2), "1111111", o2);
+	multiplexer_3 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(3), t(3), v(3), "1111111", o3);
+	multiplexer_4 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(4), t(4), v(4), "1111111", o4);
+	multiplexer_5 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(5), t(5), v(5), "1111111", o5);
 	done <= '1' WHEN state = "10" ELSE
 		'0';
 END ARCHITECTURE;
