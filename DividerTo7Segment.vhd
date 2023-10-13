@@ -7,7 +7,7 @@ ENTITY DividerTo7Segment IS
         clk, rst, trig : IN STD_LOGIC;
         a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
         done : OUT STD_LOGIC;
-        d5, d4, d3, d2, d1, d0 : OUT STD_LOGIC_VECTOR(0 TO 6)
+        d5, d4, d3, d2, d1, d0 : OUT STD_LOGIC_VECTOR(3 downto 0)
     );
 END ENTITY;
 
