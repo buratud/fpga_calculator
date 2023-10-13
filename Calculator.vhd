@@ -20,7 +20,7 @@ ARCHITECTURE flow OF Calculator IS
 	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 	SIGNAL mul_res : STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0);
 	SIGNAL sd, ob, mdb : bcds(5 DOWNTO 0);
-	SIGNAL de, dv, div_done : STD_LOGIC;
+	SIGNAL de, dv, div_done, sa, sdd, sr, s_mode, rdone : STD_LOGIC;
 	SIGNAL s, t, ad, v, md, dd, xdd, xddd : bcds(5 DOWNTO 0);
 	SIGNAL isSubtract, mul_done, temp_v, temp_e : STD_LOGIC;
 	SIGNAL temp_quotient : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
@@ -81,7 +81,7 @@ BEGIN
 	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
 		PORT MAP(
 			a => a_n, b => b_n, m => isSubtract, clk => clk,
-			d5 => ad(5), d4 => ad(4), d3 => ad(3), d2 => ad(2), d1 => ad(1), d0 => ad(0));
+			d5 => ad(5), d4 => ad(4), d3 => ad(3), d2 => ad(2), d1 => ad(1), d0 => ad(0), s_mode => sa);
 	multiplicator : ENTITY work.Multiplier(structural) GENERIC MAP (N) PORT MAP (
 		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
 		a => a_n,
@@ -99,7 +99,8 @@ BEGIN
 		d3 => dd(3),
 		d2 => dd(2),
 		d1 => dd(1),
-		d0 => dd(0)
+		d0 => dd(0),
+		s_mode => sdd
 		);
 	result_selector : FOR i IN 0 TO 5 GENERATE
 		result_selector : ENTITY work.BcdMultiplexer4To1(selector) PORT MAP (oper, dd(i), md(i), ad(i), ad(i), xddd(i));
@@ -107,10 +108,14 @@ BEGIN
 	main_selector : FOR i IN 0 TO 5 GENERATE
 		main_selector : ENTITY work.BcdMultiplexer4To1(selector) PORT MAP (state, sd(i), ob(i), xddd(i), "1111", xdd(i));
 	END GENERATE;
-	bcd_to_seven_segment_converter_5 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, '0', xdd(5), o5);
-	bcd_to_seven_segment_converter_4 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, '0', xdd(4), o4);
-	bcd_to_seven_segment_converter_3 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, '0', xdd(3), o3);
-	bcd_to_seven_segment_converter_2 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, '0', xdd(2), o2);
-	bcd_to_seven_segment_converter_1 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, '0', xdd(1), o1);
-	bcd_to_seven_segment_converter_0 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, '0', xdd(0), o0);
+	operator_seven_segment_mode : ENTITY work.Multiplexer4To1(selector) PORT MAP (oper, sdd & '0' & sa & sa, sr);
+	seven_segment_mode : ENTITY work.SevenSegmentMode(selector) PORT MAP(state, sr, s_mode);
+	operator_done : ENTITY work.Multiplexer4To1(selector) PORT MAP (oper, div_done & mul_done & '1' & '1', rdone);
+	main_state_done : ENTITY work.Multiplexer4To1(selector) PORT MAP (state, '0' & '0' & rdone & '0', done);
+	bcd_to_seven_segment_converter_5 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(5), o5);
+	bcd_to_seven_segment_converter_4 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(4), o4);
+	bcd_to_seven_segment_converter_3 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(3), o3);
+	bcd_to_seven_segment_converter_2 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(2), o2);
+	bcd_to_seven_segment_converter_1 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(1), o1);
+	bcd_to_seven_segment_converter_0 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(0), o0);
 END ARCHITECTURE;

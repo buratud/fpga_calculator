@@ -6,7 +6,8 @@ ENTITY AdderSubtractor IS
     PORT (
         a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
         m, clk : IN STD_LOGIC;
-        d5, d4, d3, d2, d1, d0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
+        d5, d4, d3, d2, d1, d0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        s_mode : OUT STD_LOGIC);
 END AdderSubtractor;
 
 ARCHITECTURE structural OF AdderSubtractor IS
@@ -25,4 +26,5 @@ BEGIN
     convertor : ENTITY work.BcdTo7SegmentDigits(flow)
         GENERIC MAP(N)
         PORT MAP(i => sum, v => overflow, o_sign => d2, o_1 => d1, o_0 => d0);
+    s_mode <= overflow;
 END structural;
