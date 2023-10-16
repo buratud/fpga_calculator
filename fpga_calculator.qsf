@@ -164,6 +164,7 @@ set_location_assignment PIN_N19 -to o5[5]
 set_location_assignment PIN_N20 -to o5[6]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to done
 set_location_assignment PIN_A8 -to done
+set_global_assignment -name VHDL_FILE UtilType.vhd
 set_global_assignment -name VHDL_FILE Divider.vhd
 set_global_assignment -name VHDL_FILE change2NToN.vhd
 set_global_assignment -name VHDL_FILE BcdTo7Segment3D1S.vhd

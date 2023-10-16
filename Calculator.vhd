@@ -2,10 +2,10 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_unsigned.ALL;
-USE work.YAY.ALL;
+USE work.UtilType.ALL;
 
 ENTITY Calculator IS
-	GENERIC (N : INTEGER := 5);
+	GENERIC (N : INTEGER := 2);
 	PORT (
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
