@@ -15,8 +15,8 @@ END ENTITY;
 ARCHITECTURE structural OF Multiplier IS
     SIGNAL result : STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0);
 BEGIN
-    d5 <= "1111";
-    d4 <= "1111";
+    d5 <= "1010";
+    d4 <= "1010";
     multiplicator : ENTITY work.Multiplicator(behavioral) GENERIC MAP (N)
         PORT MAP(clk => clk, rst => rst, trig => trig, a => a, b => b, o => result, done => done);
     converter : ENTITY work.BcdTo7Segment3D1S(flow) GENERIC MAP(2 * N)

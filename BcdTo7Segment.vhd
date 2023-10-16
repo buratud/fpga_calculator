@@ -43,6 +43,7 @@ BEGIN
                     WHEN "1000" => o <= "1000101"; -- V
                     WHEN "1001" => o <= "0011001"; -- R
                     WHEN "1010" => o <= "0111000"; -- F
+                    WHEN "1011" => o <= "0110000"; -- E
                     WHEN OTHERS => o <= "1111111"; -- none
                 END CASE;
             END IF;

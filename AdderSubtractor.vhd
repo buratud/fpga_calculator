@@ -17,9 +17,12 @@ ARCHITECTURE structural OF AdderSubtractor IS
     SIGNAL bcd_digit_0 : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL bcd_sign : STD_LOGIC_VECTOR(3 DOWNTO 0);
 BEGIN
-    d5 <= "1111";
-    d4 <= "1111";
-    d3 <= "1111";
+    d5 <= "1010" WHEN overflow = '0' ELSE
+        "1111";
+    d4 <= "1010" WHEN overflow = '0' ELSE
+        "1111";
+    d3 <= "1010" WHEN overflow = '0' ELSE
+        "1111";
     adder : ENTITY work.FullAdderGenerator(structural)
         GENERIC MAP(N => N)
         PORT MAP(a => a, b => b, m => m, s => sum, v => overflow);
