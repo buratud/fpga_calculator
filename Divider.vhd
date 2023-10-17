@@ -48,12 +48,12 @@ BEGIN
                         state <= SO;
                     ELSE
                         state <= SI;
-                        tq <= (OTHERS => '0');
-                        done <= '0';
-                        e <= '0';
-                        v <= '0';
-                        bit_counter <= 0;
                     END IF;
+                    tq <= (OTHERS => '0');
+                    done <= '0';
+                    e <= '0';
+                    v <= '0';
+                    bit_counter <= 0;
                 WHEN SO =>
                     IF dividend = max_neg AND divisor = ones THEN
                         v <= '1';

@@ -2,10 +2,10 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_unsigned.ALL;
-USE work.YAY.ALL;
+USE work.UtilType.ALL;
 
 ENTITY Calculator IS
-	GENERIC (N : INTEGER := 5);
+	GENERIC (N : INTEGER := 2);
 	PORT (
 		clk, rst, trig : IN STD_LOGIC;
 		a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
@@ -19,9 +19,9 @@ ARCHITECTURE flow OF Calculator IS
 	SIGNAL state : STD_LOGIC_VECTOR(1 DOWNTO 0) := "00";
 	SIGNAL a_n, b_n : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 	SIGNAL mul_res : STD_LOGIC_VECTOR(2 * N - 1 DOWNTO 0);
-	SIGNAL d, e, mdb : bcds(5 DOWNTO 0);
-	SIGNAL de, dv, div_done : STD_LOGIC;
-	SIGNAL s, t, u, v, md, dd : digits(5 DOWNTO 0);
+	SIGNAL sd, ob, mdb : bcds(5 DOWNTO 0);
+	SIGNAL de, dv, div_done, sa, sdd, sr, s_mode, rdone : STD_LOGIC;
+	SIGNAL s, t, ad, v, md, dd, xdd, xddd : bcds(5 DOWNTO 0);
 	SIGNAL isSubtract, mul_done, temp_v, temp_e : STD_LOGIC;
 	SIGNAL temp_quotient : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
 	SIGNAL temp_remainder : STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
@@ -48,16 +48,16 @@ BEGIN
 		GENERIC MAP(N)
 		PORT MAP(
 			i => a_n,
-			o_0 => d(3),
-			o_1 => d(4),
-			o_sign => d(5));
+			o_0 => sd(3),
+			o_1 => sd(4),
+			o_sign => sd(5));
 	convertor_b : ENTITY work.BcdTo7SegmentDigits(flow)
 		GENERIC MAP(N)
 		PORT MAP(
 			i => b_n,
-			o_0 => d(0),
-			o_1 => d(1),
-			o_sign => d(2)
+			o_0 => sd(0),
+			o_1 => sd(1),
+			o_sign => sd(2)
 		);
 	operator_register : ENTITY work.SelectOper(selector)
 		PORT MAP(
@@ -69,19 +69,19 @@ BEGIN
 	operator_conv : ENTITY work.OperatorTo7SegmentDigits(flow)
 		PORT MAP(
 			i => oper,
-			o5 => e(5),
-			o4 => e(4),
-			o3 => e(3),
-			o2 => e(2),
-			o1 => e(1),
-			o0 => e(0)
+			o5 => ob(5),
+			o4 => ob(4),
+			o3 => ob(3),
+			o2 => ob(2),
+			o1 => ob(1),
+			o0 => ob(0)
 		);
 	isSubtract <= '1' WHEN oper = "10" ELSE
 		'0';
 	adder : ENTITY work.AdderSubtractor(structural) GENERIC MAP (N)
 		PORT MAP(
 			a => a_n, b => b_n, m => isSubtract, clk => clk,
-			d5 => u(5), d4 => u(4), d3 => u(3), d2 => u(2), d1 => u(1), d0 => u(0));
+			d5 => ad(5), d4 => ad(4), d3 => ad(3), d2 => ad(2), d1 => ad(1), d0 => ad(0), s_mode => sa);
 	multiplicator : ENTITY work.Multiplier(structural) GENERIC MAP (N) PORT MAP (
 		clk => clk, rst => NOT rst, trig => (NOT state(1)) AND state(0),
 		a => a_n,
@@ -99,23 +99,23 @@ BEGIN
 		d3 => dd(3),
 		d2 => dd(2),
 		d1 => dd(1),
-		d0 => dd(0)
+		d0 => dd(0),
+		s_mode => sdd
 		);
-	multiplexer_operater : FOR i IN 0 TO 5 GENERATE
-		multiplexer_operater : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(oper, dd(i), md(i), u(i), u(i), v(i));
+	result_selector : FOR i IN 0 TO 5 GENERATE
+		result_selector : ENTITY work.BcdMultiplexer4To1(selector) PORT MAP (oper, dd(i), md(i), ad(i), ad(i), xddd(i));
 	END GENERATE;
-	digit : FOR i IN 0 TO 5 GENERATE
-		digit : ENTITY work.BcdTo7Segment(number) PORT MAP(clk, d(i), s(i));
+	main_selector : FOR i IN 0 TO 5 GENERATE
+		main_selector : ENTITY work.BcdMultiplexer4To1(selector) PORT MAP (state, sd(i), ob(i), xddd(i), "1111", xdd(i));
 	END GENERATE;
-	letter : FOR i IN 0 TO 5 GENERATE
-		letter : ENTITY work.BcdTo7Segment(letter) PORT MAP(clk, e(i), t(i));
-	END GENERATE;
-	multiplexer_0 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(0), t(0), v(0), "1111111", o0);
-	multiplexer_1 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(1), t(1), v(1), "1111111", o1);
-	multiplexer_2 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(2), t(2), v(2), "1111111", o2);
-	multiplexer_3 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(3), t(3), v(3), "1111111", o3);
-	multiplexer_4 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(4), t(4), v(4), "1111111", o4);
-	multiplexer_5 : ENTITY work.SevenSegmentMultiplexer4To1(selector) PORT MAP(state, s(5), t(5), v(5), "1111111", o5);
-	done <= '1' WHEN state = "10" ELSE
-		'0';
+	operator_seven_segment_mode : ENTITY work.Multiplexer4To1(selector) PORT MAP (oper, sdd & '0' & sa & sa, sr);
+	seven_segment_mode : ENTITY work.SevenSegmentMode(selector) PORT MAP(state, sr, s_mode);
+	operator_done : ENTITY work.Multiplexer4To1(selector) PORT MAP (oper, div_done & mul_done & '1' & '1', rdone);
+	main_state_done : ENTITY work.Multiplexer4To1(selector) PORT MAP (state, '0' & '0' & rdone & '0', done);
+	bcd_to_seven_segment_converter_5 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(5), o5);
+	bcd_to_seven_segment_converter_4 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(4), o4);
+	bcd_to_seven_segment_converter_3 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(3), o3);
+	bcd_to_seven_segment_converter_2 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(2), o2);
+	bcd_to_seven_segment_converter_1 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(1), o1);
+	bcd_to_seven_segment_converter_0 : ENTITY work.BcdTo7Segment(behavioral) PORT MAP (clk, s_mode, xdd(0), o0);
 END ARCHITECTURE;

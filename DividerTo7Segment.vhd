@@ -6,8 +6,8 @@ ENTITY DividerTo7Segment IS
     PORT (
         clk, rst, trig : IN STD_LOGIC;
         a, b : IN STD_LOGIC_VECTOR(N - 1 DOWNTO 0);
-        done : OUT STD_LOGIC;
-        d5, d4, d3, d2, d1, d0 : OUT STD_LOGIC_VECTOR(0 TO 6)
+        done, s_mode : OUT STD_LOGIC;
+        d5, d4, d3, d2, d1, d0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END ENTITY;
 
@@ -21,4 +21,5 @@ BEGIN
         done => done, e => err, v => overflow);
     div_conv : ENTITY work.BcdTo7SegmentForDivider(behaivioral) GENERIC MAP(N) PORT MAP(clk => clk, q => quotient, r => remainder, e => err, v => overflow,
         o5 => d5, o4 => d4, o3 => d3, o2 => d2, o1 => d1, o0 => d0);
+    s_mode <= err OR overflow;
 END ARCHITECTURE;
