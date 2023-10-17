@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE 10M50DAF484C7G
 set_global_assignment -name TOP_LEVEL_ENTITY Calculator
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "09:50:58  OCTOBER 02, 2023"
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.2 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -184,7 +184,6 @@ set_global_assignment -name VHDL_FILE AdderSubtractor.vhd
 set_global_assignment -name VHDL_FILE BcdTo7Segment.vhd
 set_global_assignment -name VHDL_FILE Multiplicator.vhd
 set_global_assignment -name VHDL_FILE Complementer.vhd
-set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
 set_global_assignment -name VHDL_FILE BcdTo7SegmentForDivider.vhd
 set_global_assignment -name VHDL_FILE Multiplier.vhd
 set_global_assignment -name VHDL_FILE DividerTo7Segment.vhd
